@@ -13,14 +13,6 @@ T sum(std::vector<T>* arr) {
 	return res;
 };
 
-template<typename T>
-std::vector<T> remove(std::vector<T>* arr, int index) {
-	for (int i = index; i < arr->size() - 1; i++) {
-		arr->operator[](i) = arr->operator[](i + 1);
-	}
-	arr->pop_back();
-}
-
 double sigmoid(double val) {
 	return 1 / (1 + std::exp(-val));
 }

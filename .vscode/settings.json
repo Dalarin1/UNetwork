@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "cmath": "cpp",
+        "stdexcept": "cpp"
+    },
+    "workbench.colorTheme": "Default Dark Modern"
+}
