@@ -2,10 +2,20 @@
 #include <cmath>
 #include <vector>
 
-template <typename T>
-concept operation = requires (T item){ item + item; };
 
-template<operation T>
+
+template <typename T>
+concept Summable = requires (T item){ item + item; };
+
+template<typename T, typename U>
+concept Multiplicable = requires(T a, U b) {
+    { a * b } -> std::convertible_to<decltype(a * b)>;
+};
+
+template<typename T>
+concept operational = Multiplicable<T, double> && Summable<T>;
+ 
+template<Summable T>
 T sum(std::vector<T>* arr) {
 	T res;
 	for (int i = 0; i < arr->size(); i++) {

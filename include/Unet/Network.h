@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include "Neuron.h"
 
+template <operational T>
 class net {
 public:
 	std::vector<neuron* > input_neurons; 
@@ -13,12 +14,12 @@ public:
 	net(std::vector<int>& _struct);
 	~net() { for (const auto& i : neurons) { delete i; } input_neurons.clear(); neurons.clear(); output_neurons.clear(); }
 
-	void set_input_data(std::vector<double>&);
+	void set_input_data(std::vector<T>&);
 	void feed_forward();
-	std::vector<double> get_result();
+	std::vector<T> get_result();
 };
-
-net::net(std::vector<int>& _struct) {
+template <operational T>
+net<T>::net(std::vector<int>& _struct) {
 	int index = 0;
 	for (int layer = 0; layer < _struct.size(); layer++) {
 		for (int i = 0; i < _struct[layer]; i++) {
@@ -40,7 +41,8 @@ net::net(std::vector<int>& _struct) {
         index += _struct[layer];
     }
 }
-void net::feed_forward() {
+template <operational T>
+void net<T>::feed_forward() {
 	for(int i = 0; i < input_neurons.size(); i++){
 		if(input_neurons[i]->inputs.size()  == 0) {
 			throw std::runtime_error("ERROR: Not enough input data");}}
@@ -50,14 +52,16 @@ void net::feed_forward() {
 	 	}
 	}
 }
-void net::set_input_data(std::vector<double>& data){
+template <operational T>
+void net<T>::set_input_data(std::vector<T>& data){
 	if(data.size() != input_neurons.size()){ 
 		throw std::runtime_error("ERROR: Data size does not match input neurons size");}
 	for(int i = 0; i < data.size(); i++){
 		input_neurons[i]->inputs.push_back(data[i]);}
 	return;
 }
-std::vector<double> net::get_result(){
+template <operational T>
+std::vector<T> net<T>::get_result(){
 	std::vector<double> result;
 	for(auto& i : output_neurons){
 		result.emplace_back(i->get_value());
