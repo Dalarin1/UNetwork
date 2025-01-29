@@ -4,17 +4,10 @@
 
 class neuron {
 public:
-<<<<<<< HEAD
-	double value;
-	double bias;
-	std::vector<double> inputs;
-	double (*function)(double);
-=======
 	double value = 1;
 	double bias = 1;
 	std::vector<double> inputs;
 	double (*function)(double) = sigmoid;
->>>>>>> d0e5b6c (Nothing happened at 27.01.2024)
 	std::vector<std::pair<neuron*, double>> connections;
 
 	double get_value() {

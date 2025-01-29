@@ -2,19 +2,6 @@
 #include "Neuron.h"
 
 class net {
-<<<<<<< HEAD
-	std::vector<neuron* > input_neurons;
-	std::vector<neuron* > output_neurons;
-	
-	net() = default;
-	net(std::vector<neuron*>& _input) {
-		input_neurons = _input;}
-
-	std::vector<double> get_result() {
-
-	}
-};
-=======
 public:
 	std::vector<neuron* > input_neurons;
 	std::vector<neuron* > neurons;
@@ -22,16 +9,15 @@ public:
 	
 	net() = default;
 	net(std::vector<neuron*>& _input) :input_neurons(_input) {}
-	net(std::vector<int> _struct);
+	net(std::vector<int>& _struct);
 	~net() { for (const auto& i : neurons) { delete i; } input_neurons.clear(); neurons.clear(); output_neurons.clear(); }
 
-	void set_input_data(std::vector<double>);
+	void set_input_data(std::vector<double>&);
 	void feed_forward();
 	std::vector<double> get_result();
-	
 };
 
-net::net(std::vector<int> _struct) {
+net::net(std::vector<int>& _struct) {
 	for (int layer = 0; layer < _struct.size(); layer++) {
 		for (int i = 0; i < _struct[layer]; i++) {
 			neurons.push_back(new neuron);
@@ -47,9 +33,16 @@ net::net(std::vector<int> _struct) {
 	}
 }
 void net::feed_forward() {
-	std::vector<neuron* >* current_neurons = &input_neurons;
-
-
-	delete current_neurons;
+	for(int i = 0; i < input_neurons.size(); i++){if(input_neurons[i]->inputs.size()  == 0) {throw("ERROR: Not enoug input data");}}
+	if(neurons.size() > 0){
+		for(int i = 0; i < neurons.size(); i++){
+			neurons[i]->feed_forward();
+	 	}
+	}
 }
->>>>>>> d0e5b6c (Nothing happened at 27.01.2024)
+void net::set_input_data(std::vector<double>& data){
+	if(data.size() != input_neurons.size()){throw("ERROR: Data.size != input_neurons.size");}
+	for(int i = 0; i < data.size(); i++){
+		input_neurons[i]->inputs.push_back(data[i]);}
+	return;
+}
