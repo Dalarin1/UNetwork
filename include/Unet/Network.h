@@ -1,8 +1,6 @@
 #pragma once
 #include <stdexcept>
 #include "Neuron.h"
-
-template <operational T>
 class net {
 public:
 	std::vector<neuron* > input_neurons; 
@@ -10,16 +8,17 @@ public:
 	std::vector<neuron* > output_neurons;
 	
 	net() = default;
-	net(std::vector<neuron*>& _input) :input_neurons(_input) {}
-	net(std::vector<int>& _struct);
+	net(const std::vector<neuron*>& _input) :input_neurons(_input) {}
+	net(const std::vector<int>& _struct);
 	~net() { for (const auto& i : neurons) { delete i; } input_neurons.clear(); neurons.clear(); output_neurons.clear(); }
 
-	void set_input_data(std::vector<T>&);
+	void set_input_data(const std::vector<double>&);
 	void feed_forward();
-	std::vector<T> get_result();
+	void train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, int epochs);
+	std::vector<double> get_result();
 };
-template <operational T>
-net<T>::net(std::vector<int>& _struct) {
+
+net::net(const std::vector<int>& _struct) {
 	int index = 0;
 	for (int layer = 0; layer < _struct.size(); layer++) {
 		for (int i = 0; i < _struct[layer]; i++) {
@@ -41,8 +40,8 @@ net<T>::net(std::vector<int>& _struct) {
         index += _struct[layer];
     }
 }
-template <operational T>
-void net<T>::feed_forward() {
+
+void net::feed_forward() {
 	for(int i = 0; i < input_neurons.size(); i++){
 		if(input_neurons[i]->inputs.size()  == 0) {
 			throw std::runtime_error("ERROR: Not enough input data");}}
@@ -52,18 +51,22 @@ void net<T>::feed_forward() {
 	 	}
 	}
 }
-template <operational T>
-void net<T>::set_input_data(std::vector<T>& data){
+
+void net::set_input_data(const std::vector<double>& data){
 	if(data.size() != input_neurons.size()){ 
 		throw std::runtime_error("ERROR: Data size does not match input neurons size");}
 	for(int i = 0; i < data.size(); i++){
 		input_neurons[i]->inputs.push_back(data[i]);}
 	return;
 }
-template <operational T>
-std::vector<T> net<T>::get_result(){
+
+std::vector<double> net::get_result(){
 	std::vector<double> result;
 	for(auto& i : output_neurons){
 		result.emplace_back(i->get_value());
 	}
 	return result;}
+
+void net::train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, int epochs) {
+
+}

@@ -1,27 +1,27 @@
 #pragma once
 #include "Functions.h"
 
-template<operational T>
+
 class neuron {
 public:
-	T value = 0;
-	T bias = 0;
-	std::vector<T> inputs;
-	T (*function)(T) = sigmoid;
-	std::vector<std::pair<neuron*, T>> connections;
+	double value = 0;
+	double bias = 0;
+	std::vector<double> inputs;
+	double (*function)(double) = sigmoid;
+	std::vector<std::pair<neuron*, double>> connections;
 
-	inline T get_value() {
-		value = bias + function(sum<T>(&inputs));
+	inline double get_value() {
+		value = bias + function(sum<double>(&inputs));
 		return value;
 	}
 	void feed_forward() {
-		T val = get_value();
+		double val = get_value();
 		for (auto& connection: connections) {
 			connection.first->inputs.push_back(val * connection.second);
 		}
 	}
 
-	inline void add_connection(neuron* _next, T weight = 0) {
+	inline void add_connection(neuron* _next, double weight = 1) {
 		connections.push_back(std::pair(_next, weight));
 	}
 	void remove_connection(neuron* _neuron) {
@@ -32,7 +32,7 @@ public:
 		connections.erase(it, connections.end());
 	}
 	neuron() = default;
-	neuron(T _bias, T(*_func)(T) = nullptr) :bias(_bias), function(_func), value(0) {}
+	neuron(double _bias, double(*_func)(double) = nullptr) :bias(_bias), function(_func), value(0) {}
 	~neuron() { inputs.clear(); connections.clear(); }
 
 };
